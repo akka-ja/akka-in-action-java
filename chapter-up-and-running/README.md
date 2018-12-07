@@ -1,27 +1,35 @@
-Heroku deployment
-=================
+Akka実践バイブルのサンプルコードのJava版
+==============
 
-Heroku normally expects the project to reside in the root of the git repo.
-the source code for the up and running chapter is not in the root of the repo, so you need to use a different command to deploy to heroku:
+Akka実践バイブル「第2章　最小のAkkaアプリケーション」のサンプルコードをJavaに置き換えてみた。
 
-    git subtree push --prefix chapter-up-and-running heroku master
+### 必要な環境
+* JDK8以上
+* Maven
 
-This command has to be executed from the root of the git repo, not from within the chapter directory.
-The git subtree command is not as featured as the normal push command, for instance, it does not provide a flag to force push,
-and it does not support the <local-branch>:<remote-branch> syntax which you can use with git push:
+### ソースコードの取得
+```
+git clone <xxx.git>
+```
 
-    git push heroku my-localbranch:master
+### コンパイル・サーバー起動
+- `chapter-up-and-running` ディレクトリで実行
+```
+mvn compile exec:exec
+```
 
-Which is normally used to deploy from a branch to heroku (pushing a branch to heroku master).
-It is possible to nest commands though, so if you want to push from a branch you can do the following:
+### テスト
+- `chapter-up-and-running` ディレクトリで実行
+```
+mvn test
+```
 
-    git push heroku `git subtree split --prefix chapter-up-and-running my-local-branch`:master
+### APIエンドポイント
 
-Where *my-local-branch* is your local branch.
-Forcing a push can be done by nesting commands as well:
-
-    git push heroku `git subtree split --prefix chapter-up-and-running master`:master --force
-
-The above pushes the changes in local master to heroku master.
-
-
+| 機能 | HTTPメソッド | パス | JSON |
+| --- | ----- | ---- | --- |
+| イベント作成 | POST | /events/<イベント名>/ | {"tickets":<枚数>} |
+| チケット購入 | POST | /events/<イベント名>/tickets/ | {"tickets":<枚数>} |
+| イベント一覧 | GET | /events/ | |
+| イベント取得 | GET | /events/<イベント名>/ |
+| イベントキャンセル | DELETE | /events/<イベント名>/ |
